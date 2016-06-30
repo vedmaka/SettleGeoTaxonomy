@@ -1,0 +1,9 @@
+{
+  "@metadata": {
+    "authors": [
+      "DCamer"
+    ]
+  },
+  "settlegeotaxonomy-desc": "Это пример расширения",
+  "settlegeotaxonomy-i18n-welcome": "Добро пожаловать в файл локализации расширения SettleGeoTaxonomy."
+}

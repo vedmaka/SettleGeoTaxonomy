@@ -1,0 +1,7 @@
+{
+  "@metadata": {
+    "authors": []
+  },
+  "settlegeotaxonomy-desc": "This is an example extension",
+  "settlegeotaxonomy-i18n-welcome": "Welcome to the localization file of the SettleGeoTaxonomy extension."
+}

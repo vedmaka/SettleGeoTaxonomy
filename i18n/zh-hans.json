@@ -1,0 +1,10 @@
+{
+  "@metadata": {
+    "authors": [
+      "Hydra",
+      "Hudafu"
+    ]
+  },
+  "settlegeotaxonomy-desc": "这是一个示例扩展程序",
+  "settlegeotaxonomy-i18n-welcome": "欢迎来到SettleGeoTaxonomy扩展程序的本地化文件。"
+}

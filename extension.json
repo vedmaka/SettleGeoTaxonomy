@@ -1,0 +1,56 @@
+{
+	"name": "SettleGeoTaxonomy",
+	"version": "0.0.1",
+	"author": [
+		"Jon Anderton"
+	],
+	"url": "https://www.mediawiki.org/wiki/Extension:SettleGeoTaxonomy",
+	"descriptionmsg": "settlegeotaxonomy-desc",
+	"license-name": "MIT",
+	"type": "other",
+	"AutoloadClasses": {
+        "SettleGeoTaxonomy": "SettleGeoTaxonomy.class.php",
+		"SettleGeoTaxonomyHooks": "SettleGeoTaxonomy.hooks.php",
+		"SpecialSettleGeoTaxonomy": "specials/SpecialSettleGeoTaxonomy.php",
+		"SettleGeoTaxonomyApi": "includes/SettleGeoTaxonomyApi.php"
+	},
+	"config": {
+		"SettleGeoTaxonomyEnableFoo": true
+	},
+	"callback": "SettleGeoTaxonomyHooks::onExtensionLoad",
+	"ExtensionMessagesFiles": {
+		"SettleGeoTaxonomyAlias": "SettleGeoTaxonomy.i18n.alias.php"
+	},
+	"Hooks": {
+		"LoadExtensionSchemaUpdates": [
+			"SettleGeoTaxonomyHooks::onLoadExtensionSchemaUpdates"
+		]
+	},
+	"MessagesDirs": {
+		"SettleGeoTaxonomy": [
+			"i18n"
+		]
+	},
+	"ResourceModules": {
+		"ext.settlegeotaxonomy.foo": {
+			"scripts": [
+				"modules/ext.SettleGeoTaxonomy.js",
+				"modules/ext.SettleGeoTaxonomy.foo.js"
+			],
+			"styles": [
+				"modules/ext.SettleGeoTaxonomy.foo.css"
+			]
+		}
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "",
+		"remoteExtPath": "SettleGeoTaxonomy"
+	},
+	"SpecialPages": {
+		"SettleGeoTaxonomy": "SpecialSettleGeoTaxonomy"
+	},
+	"APIModules": {
+		"settlegeotaxonomy": "SettleGeoTaxonomyApi"
+	},
+	"manifest_version": 1
+}

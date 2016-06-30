@@ -1,0 +1,10 @@
+{
+  "@metadata": {
+    "authors": [
+      "Jopparn",
+      "LittleGun"
+    ]
+  },
+  "settlegeotaxonomy-desc": "Detta är ett exempel-tillägg",
+  "settlegeotaxonomy-i18n-welcome": "Välkommen till SettleGeoTaxonomy-tilläggets lokaliseringsfil."
+}

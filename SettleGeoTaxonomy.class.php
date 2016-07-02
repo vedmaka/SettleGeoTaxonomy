@@ -42,6 +42,7 @@ class SettleGeoTaxonomy
 
 		$items = array();
 		$earth = new Geographer\Earth();
+		$earth->setLanguage( $lang );
 
 		switch ( $type ) {
 			case self::TYPE_COUNTRY:

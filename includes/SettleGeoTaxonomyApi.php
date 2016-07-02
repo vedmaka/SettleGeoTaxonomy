@@ -27,7 +27,7 @@ class SettleGeoTaxonomyApi extends ApiBase {
 				break;
 		}
 
-		$items = SettleGeoTaxonomy::getInstance()->getEntities( $nativeType, $parent, $wgLang->getCode() );
+		$items = SettleGeoTaxonomy::getInstance()->getEntities( $nativeType, $parent, $this->getLanguage()->getCode() );
 
 		$this->getResult()->addValue( $this->getModuleName(), 'items', $items );
 

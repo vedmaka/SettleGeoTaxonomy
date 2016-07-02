@@ -3,6 +3,9 @@
 class SettleGeoTaxonomyApi extends ApiBase {
 
 	public function execute() {
+
+		global $wgLang;
+
 		$params = $this->extractRequestParams();
 		$type = $params['type'];
 
@@ -24,7 +27,7 @@ class SettleGeoTaxonomyApi extends ApiBase {
 				break;
 		}
 
-		$items = SettleGeoTaxonomy::getInstance()->getEntities( $nativeType, $parent, false );
+		$items = SettleGeoTaxonomy::getInstance()->getEntities( $nativeType, $parent, $wgLang->getCode() );
 
 		$this->getResult()->addValue( $this->getModuleName(), 'items', $items );
 

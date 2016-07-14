@@ -20,6 +20,8 @@ class SettleGeoTaxonomyHooks
 	public static function onLoadExtensionSchemaUpdates( $updater )
 	{
 
+		$updater->addExtensionTable( 'sgt_geo_index', dirname(__FILE__).'/schema/sgt_geo_index.sql' );
+
 	}
 
 }

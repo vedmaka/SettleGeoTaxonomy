@@ -67,4 +67,59 @@ class SettleGeoTaxonomy
 		return $items;
 	}
 
+	public function getMatch( $term, $limit = null, $type = null, $parentGeoCode = null )
+	{
+
+		$items = array();
+
+		$dbr = wfGetDB(DB_SLAVE);
+
+		$conditions = array();
+		$options = array();
+
+		if( $limit !== null ) {
+			$options = array('LIMIT' => $limit);
+		}
+
+		if( $type !== null ) {
+			$conditions['type'] = $type;
+		}
+
+		if( $parentGeoCode !== null ) {
+			$conditions['parent_id'] = $parentGeoCode;
+		}
+
+		$conditions[] = 'MATCH(body) AGAINST("'.htmlspecialchars(trim($term)).'*" in boolean mode)';
+
+		$result = $dbr->select( 'sgt_geo_index',
+			array(
+				'type',
+				'code',
+				'parent_id',
+				'code_geonames',
+				'name',
+				'suffix'
+			),
+			$conditions,
+			__METHOD__,
+			$options
+		);
+
+		if( $result->numRows() ) {
+			while( $row = $result->fetchRow() ) {
+				$items[] = array(
+					'type' => $row['type'],
+					'code' => $row['type'],
+					'parent_id' => $row['parent_id'],
+					'code_geonames' => $row['code_geonames'],
+					'name' => $row['name'],
+					'suffix' => $row['suffix']
+				);
+			}
+		}
+
+		return $items;
+
+	}
+
 }

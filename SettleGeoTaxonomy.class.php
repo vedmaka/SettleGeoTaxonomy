@@ -46,19 +46,19 @@ class SettleGeoTaxonomy
 
 		switch ( $type ) {
 			case self::TYPE_COUNTRY:
-				$items = $earth->getCountries()->setLanguage( $lang )->toArray();
+				$items = $earth->getCountries()->setLanguage( $lang )->useLongNames()->toArray();
 				break;
 			case self::TYPE_STATE:
 				if( $parent != null ) {
 					$country = $earth->findOne( array('geonamesCode' => $parent) );
-					$items = $country->getStates()->setLanguage( $lang )->toArray();
+					$items = $country->getStates()->setLanguage( $lang )->useLongNames()->toArray();
 				}
 				break;
 			case self::TYPE_CITY:
 				if( $parent != null ) {
 					$state = Geographer\State::build( $parent );
 					if( $state ) {
-						$items = $state->getCities()->setLanguage( $lang )->toArray();
+						$items = $state->getCities()->setLanguage( $lang )->useLongNames()->toArray();
 					}
 				}
 				break;

@@ -8,4 +8,7 @@ CREATE TABLE /*_*/sgt_geo_index (
   suffix VARCHAR(255) DEFAULT '',
   FULLTEXT INDEX IDX_sgt_geo_index_body (body),
   FULLTEXT INDEX IDX_sgt_geo_index3 (body, code_geonames)
-)/*$wgDbTableOptions*/;
+) ENGINE = INNODB
+AVG_ROW_LENGTH = 207
+CHARACTER SET utf8
+COLLATE utf8_general_ci;

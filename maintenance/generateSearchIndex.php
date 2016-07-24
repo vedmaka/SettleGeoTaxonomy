@@ -40,6 +40,10 @@ class SettleGeoTaxonomyIndexGenerator extends \Maintenance {
 
 		$dbw = wfGetDB(DB_MASTER);
 
+		$this->output("\nClearing old index..");
+
+		$dbw->delete( 'sgt_geo_index', '*' );
+
 		$this->output("\nStarting to build search index..");
 
 		$earth = new Geographer\Earth();

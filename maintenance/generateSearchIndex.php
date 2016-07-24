@@ -52,7 +52,7 @@ class SettleGeoTaxonomyIndexGenerator extends \Maintenance {
 				'type' => 'country',
 				'code' => $country->getCode(),
 				'code_geonames' => $country->getGeonamesCode(),
-				'name' => $country->getName()
+				'name' => $country->getShortName()
 			));
 			$states = $country->getStates();
 			foreach ( $states as $state ) {
@@ -61,9 +61,9 @@ class SettleGeoTaxonomyIndexGenerator extends \Maintenance {
 					'type' => 'state',
 					'code' => $state->getCode(),
 					'code_geonames' => $state->getGeonamesCode(),
-					'name' => $state->getName(),
+					'name' => $state->getShortName(),
 					'parent_id' => $country->getGeonamesCode(),
-					'suffix' => $country->getName()
+					'suffix' => $country->getShortName()
 				));
 				$cities = $state->getCities();
 				foreach ( $cities as $city ) {
@@ -72,9 +72,9 @@ class SettleGeoTaxonomyIndexGenerator extends \Maintenance {
 						'type' => 'city',
 						'code' => $city->getCode(),
 						'code_geonames' => $city->getGeonamesCode(),
-						'name' => $city->getName(),
+						'name' => $city->getShortName(),
 						'parent_id' => $state->getGeonamesCode(),
-						'suffix' => $city->getName() .', '. $country->getName()
+						'suffix' => $state->getShortName() .', '. $country->getShortName()
 					));
 				}
 			}

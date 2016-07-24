@@ -8,4 +8,4 @@ CREATE TABLE /*_*/sgt_geo_index (
   suffix VARCHAR(255) DEFAULT '',
   FULLTEXT INDEX IDX_sgt_geo_index_body (body),
   FULLTEXT INDEX IDX_sgt_geo_index3 (body, code_geonames)
-) ENGINE=MyISAM;
+)/*$wgDbTableOptions*/;

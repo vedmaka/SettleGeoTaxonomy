@@ -21,6 +21,7 @@ class SettleGeoTaxonomyHooks
 	{
 
 		$updater->addExtensionTable( 'sgt_geo_index', dirname(__FILE__).'/schema/sgt_geo_index.sql' );
+		$updater->addExtensionField( 'sgt_geo_index', 'lang', dirname(__FILE__).'/schema/sgt_geo_index_add_lang.sql' );
 
 	}
 

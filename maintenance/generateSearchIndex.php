@@ -8,6 +8,8 @@ require_once $basePath . '/maintenance/Maintenance.php';
 
 class SettleGeoTaxonomyIndexGenerator extends \Maintenance {
 
+	private $dbw;
+
 	/**
 	 * @since 2.0
 	 */
@@ -25,7 +27,7 @@ class SettleGeoTaxonomyIndexGenerator extends \Maintenance {
 	 */
 	protected function addDefaultParams() {
 
-		//$this->addOption( 'file', '<file> output file.', false, true, 'o' );
+		$this->addOption( 'languages', '<lang1,lang2> list of languages.', false, true, 'l' );
 
 	}
 
@@ -35,56 +37,109 @@ class SettleGeoTaxonomyIndexGenerator extends \Maintenance {
 	 * @since 2.0
 	 */
 	public function execute() {
+		
+		error_reporting(E_ALL);
+		ini_set('display_errors', 1);
 
 		global $wgLang;
+		
+		$defaultLang = $wgLang->getCode();
+		
+		$languagesToProcess = array();
 
-		$dbw = wfGetDB(DB_MASTER);
+		$this->dbw = wfGetDB(DB_MASTER);
 
 		$this->output("\nClearing old index..");
 
-		$dbw->delete( 'sgt_geo_index', '*' );
+		$this->dbw->delete( 'sgt_geo_index', '*' );
 
 		$this->output("\nStarting to build search index..");
 
+		if( $this->hasOption('languages') ) {
+			$optLanguage = $this->getOption('languages');
+			$optValues = $optLanguage;
+			if( strpos( $optValues, ',' ) !== false ) {
+				$optValues = explode(',', $optValues );
+				$languagesToProcess = $optValues;
+			}else{
+				$languagesToProcess = array( $optValues );
+			}
+		}else{
+			$languagesToProcess = array( $defaultLang );
+		}
+		
+		foreach( $languagesToProcess as $l ) {
+			$this->output("\nLanguage: ".$l);
+			$this->generateIndex( strtolower($l) );
+		}
+		
+		$this->output("\n");
+		return true;
+	}
+	
+	private function generateIndex( $lang ) {
+		
 		$earth = new Geographer\Earth();
-		$earth->setLanguage( $wgLang->getCode() );
+		$earth->setLanguage( $lang )->useShortNames();
 
 		$countries = $earth->getCountries();
 		foreach ( $countries as $country ) {
-			$dbw->insert( 'sgt_geo_index', array(
-				'body' => $country->getName() . ' ' . $country->getShortName() . ' ' . $country->getLongName(),
-				'type' => 'country',
-				'code' => $country->getCode(),
-				'code_geonames' => $country->getGeonamesCode(),
-				'name' => $country->getShortName()
-			));
+			try {
+				$this->dbw->insert( 'sgt_geo_index', array(
+					'body' => $country->getName() . ' ' . $country->getShortName() . ' ' . $country->getLongName(),
+					'type' => 'country',
+					'code' => $country->getCode(),
+					'code_geonames' => $country->getGeonamesCode(),
+					'name' => $country->getShortName(),
+					'lang' => $lang
+				));
+				$this->output(".");
+			}catch( Exception $e ) {
+				$this->output("X");
+			}
+			
 			$states = $country->getStates();
 			foreach ( $states as $state ) {
-				$dbw->insert( 'sgt_geo_index', array(
-					'body' => $state->getName() . ' ' . $state->getShortName() . ' ' . $state->getLongName(),
-					'type' => 'state',
-					'code' => $state->getCode(),
-					'code_geonames' => $state->getGeonamesCode(),
-					'name' => $state->getShortName(),
-					'parent_id' => $country->getGeonamesCode(),
-					'suffix' => $country->getShortName()
-				));
+				
+				try {
+					$this->dbw->insert( 'sgt_geo_index', array(
+						'body' => $state->getName() . ' ' . $state->getShortName() . ' ' . $state->getLongName(),
+						'type' => 'state',
+						'code' => $state->getCode(),
+						'code_geonames' => $state->getGeonamesCode(),
+						'name' => $state->getShortName(),
+						'parent_id' => $country->getGeonamesCode(),
+						'suffix' => $country->getShortName(),
+						'lang' => $lang
+					));
+					$this->output(".");
+				}catch( Exception $e ) {
+					$this->output("X");	
+				}	
+				
 				$cities = $state->getCities();
 				foreach ( $cities as $city ) {
-					$dbw->insert( 'sgt_geo_index', array(
-						'body' => $city->getName() . ' ' . $city->getShortName() . ' ' . $city->getLongName(),
-						'type' => 'city',
-						'code' => $city->getCode(),
-						'code_geonames' => $city->getGeonamesCode(),
-						'name' => $city->getShortName(),
-						'parent_id' => $state->getGeonamesCode(),
-						'suffix' => $state->getShortName() .', '. $country->getShortName()
-					));
+					
+					try {
+						$this->dbw->insert( 'sgt_geo_index', array(
+							'body' => $city->getName() . ' ' . $city->getShortName() . ' ' . $city->getLongName(),
+							'type' => 'city',
+							'code' => $city->getCode(),
+							'code_geonames' => $city->getGeonamesCode(),
+							'name' => $city->getShortName(),
+							'parent_id' => $state->getGeonamesCode(),
+							'suffix' => $state->getShortName() .', '. $country->getShortName(),
+							'lang' => $lang
+						));
+						$this->output(".");
+					}catch( Exception $e ) {
+						$this->output("X");
+					}
 				}
 			}
 		}
 
-		return true;
+		
 	}
 
 }

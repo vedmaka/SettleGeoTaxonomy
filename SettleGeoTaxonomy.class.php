@@ -38,7 +38,7 @@ class SettleGeoTaxonomy
 	 * @return array
 	 *
 	 */
-	public function getEntities( $type, $parent = null, $lang = 'en' ) {
+	public function getEntities( $type, $parent = null, $lang = 'en', $sort = null ) {
 
 		$items = array();
 		$earth = new Geographer\Earth();
@@ -63,8 +63,26 @@ class SettleGeoTaxonomy
 				}
 				break;
 		}
+		
+		switch ($sort) {
+			case null:
+				// no value specified, sort alphabetically
+				if( count( $items ) > 1 ) {
+					usort( $items, array($this, 'sortEntities') );
+				}
+				break;
+			
+			default:
+				// do nothing = no sorting
+				break;
+		}
 
 		return $items;
+	}
+	
+	private function sortEntities($a, $b)
+	{
+		return strcmp($a['name'], $b['name']);
 	}
 
 	public function getMatch( $term, $limit = null, $type = null, $parentGeoCode = null )
